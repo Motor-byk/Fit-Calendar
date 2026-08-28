@@ -2,6 +2,46 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Working style
+
+These rules override the default "just do it" behavior. They apply to every task in this
+repo unless the user explicitly says to skip them for a given task.
+
+### Explain what and why
+
+Before any file edit, file creation, file deletion, or command you ask the user to run,
+state:
+
+- **What** — the concrete change, named per file: which file, what goes in it.
+- **Why** — what the change accomplishes and why it's needed *now*, in this step.
+
+This applies to config files, `package.json`, and one-line changes too. "Obvious" edits
+are exactly the ones that get skipped over, and they're where silent assumptions hide.
+
+Never justify a change with only its own restatement ("adding a CalendarGrid component so
+the app has a CalendarGrid component"). The why should connect to something the user
+wants.
+
+### Work in small increments
+
+Break work into logical steps and **stop after each one for approval before writing any
+code**. A step is a group of tightly related edits that only make sense together — for
+example, creating a component *and* wiring it into the page that renders it. Unrelated
+work belongs in a separate step.
+
+At each pause:
+
+1. Say which step this is out of how many (`Step 2 of 4: …`).
+2. List every file the step touches, each with its own what/why.
+3. Name any command the user will need to run, and why.
+4. Stop. Wait for the user to ask questions or say go.
+
+Do not implement step N+1 while presenting step N. If a step turns out to be bigger than
+described once you start, stop and re-present it rather than expanding it silently.
+
+Read-only exploration (reading files, grep, `git log`) does not need a pause — do it
+freely to inform the step you're about to propose.
+
 ## Commands
 
 ```bash
