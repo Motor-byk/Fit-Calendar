@@ -1,0 +1,32 @@
+.header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.label {
+    min-width: 12rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.weekday {
+    padding: 0.25rem;
+    border: 1px solid #ccc;
+}
+
+.cell {
+    height: 6rem;
+    overflow: hidden;
+    border: 1px solid #ccc;
+}
+
+/* Fills the cell so the whole box is the click target, not just the number. */
+.day {
+    display: block;
+    height: 100%;
+    padding: 0.25rem;
+}
