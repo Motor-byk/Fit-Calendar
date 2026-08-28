@@ -9,7 +9,7 @@ function App() {
     <div>
         <Routes>
             <Route index element={<HomePage/>}/>
-            <Route path="calendar" element={<MonthViewPage/>}/>
+            <Route path="calendar/month" element={<MonthViewPage/>}/>
             <Route path="calendar/day" element={<DayViewPage/>}/>
         </Routes>
     </div>
