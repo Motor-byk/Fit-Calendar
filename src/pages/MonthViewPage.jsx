@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, useSearchParams } from "react-router"
 import {
     buildMonthCells,
@@ -16,7 +17,16 @@ function startOfThisMonth() {
 
 export default function MonthViewPage(){
     const [params, setParams] = useSearchParams();
-    const viewMonth = parseMonthKey(params.get("m")) ?? startOfThisMonth();
+    const monthKey = params.get("m");
+    const viewMonth = parseMonthKey(monthKey) ?? startOfThisMonth();
+
+    // Arriving without a usable ?m= still renders the current month, so write that month
+    // back into the URL — otherwise the address bar says nothing until you page months,
+    // and it can't be copied or bookmarked.
+    useEffect(() => {
+        if (parseMonthKey(monthKey)) return;
+        setParams({ m: toMonthKey(startOfThisMonth()) }, { replace: true });
+    }, [monthKey, setParams]);
 
     const year = viewMonth.getFullYear();
     const month = viewMonth.getMonth();
@@ -29,9 +39,10 @@ export default function MonthViewPage(){
         setParams({ m: toMonthKey(target) }, { replace: true });
     }
 
-    // Dropping the param falls back to the current month.
+    // Written out rather than cleared: dropping the param would just be refilled by the
+    // effect above, costing an extra render and a flicker in the URL.
     function goToToday() {
-        setParams({}, { replace: true });
+        setParams({ m: toMonthKey(startOfThisMonth()) }, { replace: true });
     }
 
     const cellStyles = "h-24 overflow-hidden border border-solid border-[#ccc]"
