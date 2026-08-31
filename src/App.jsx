@@ -10,8 +10,8 @@ function App() {
     <div>
         <Routes>
             <Route index element={<HomePage/>}/>
-            <Route path="calendar/month" element={<MonthViewPage/>}/>
-            <Route path="calendar/day/:date" element={<DayViewPage/>}/>
+            <Route path="/calendar/month" element={<MonthViewPage/>}/>
+            <Route path="/calendar/day/:date" element={<DayViewPage/>}/>
             <Route path="*" element={<NotFoundPage/>}/>
         </Routes>
     </div>

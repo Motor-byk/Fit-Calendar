@@ -6,7 +6,6 @@ import {
     toDateKey,
     toMonthKey,
 } from "../utils/calendar";
-import styles from "./MonthViewPage.module.css";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -35,27 +34,28 @@ export default function MonthViewPage(){
         setParams({}, { replace: true });
     }
 
+    const cellStyles = "h-24 overflow-hidden border border-solid border-[#ccc]"
     return(
         <div>
-            <div className={styles.header}>
+            <div className="flex items-center gap-4">
                 <Link to="/">Home</Link>
                 <button onClick={() => goToMonth(-1)} aria-label="Previous month">‹</button>
-                <span className={styles.label}>{monthLabel(viewMonth)}</span>
+                <span className="min-w-48">{monthLabel(viewMonth)}</span>
                 <button onClick={() => goToMonth(1)} aria-label="Next month">›</button>
                 <button onClick={goToToday}>Today</button>
             </div>
 
-            <div className={styles.grid}>
+            <div className="grid grid-cols-7">
                 {WEEKDAYS.map((weekday) => (
-                    <div key={weekday} className={styles.weekday}>{weekday}</div>
+                    <div key={weekday} className="p-1 border border-solid border-[#ccc]">{weekday}</div>
                 ))}
 
                 {cells.map((date, index) =>
                     date === null ? (
-                        <div key={`blank-${index}`} className={styles.cell}/>
+                        <div key={`blank-${index}`} className={cellStyles}/>
                     ) : (
-                        <div key={toDateKey(date)} className={styles.cell}>
-                            <Link to={`/calendar/day/${toDateKey(date)}`} className={styles.day}>
+                        <div key={toDateKey(date)} className={cellStyles}>
+                            <Link to={`/calendar/day/${toDateKey(date)}`} className="block h-full p-1">
                                 {date.getDate()}
                             </Link>
                         </div>
