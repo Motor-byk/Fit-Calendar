@@ -2,30 +2,27 @@ import { useEffect } from "react";
 import { Link, useSearchParams } from "react-router"
 import {
     buildMonthCells,
+    isToday,
     monthLabel,
     parseMonthKey,
+    startOfMonth,
     toDateKey,
     toMonthKey,
 } from "../utils/calendar";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-function startOfThisMonth() {
-    const today = new Date();
-    return new Date(today.getFullYear(), today.getMonth(), 1);
-}
-
 export default function MonthViewPage(){
     const [params, setParams] = useSearchParams();
     const monthKey = params.get("m");
-    const viewMonth = parseMonthKey(monthKey) ?? startOfThisMonth();
+    const viewMonth = parseMonthKey(monthKey) ?? startOfMonth(new Date());
 
     // Arriving without a usable ?m= still renders the current month, so write that month
     // back into the URL — otherwise the address bar says nothing until you page months,
     // and it can't be copied or bookmarked.
     useEffect(() => {
         if (parseMonthKey(monthKey)) return;
-        setParams({ m: toMonthKey(startOfThisMonth()) }, { replace: true });
+        setParams({ m: toMonthKey(startOfMonth(new Date())) }, { replace: true });
     }, [monthKey, setParams]);
 
     const year = viewMonth.getFullYear();
@@ -42,10 +39,12 @@ export default function MonthViewPage(){
     // Written out rather than cleared: dropping the param would just be refilled by the
     // effect above, costing an extra render and a flicker in the URL.
     function goToToday() {
-        setParams({ m: toMonthKey(startOfThisMonth()) }, { replace: true });
+        setParams({ m: toMonthKey(startOfMonth(new Date())) }, { replace: true });
     }
 
     const cellStyles = "h-24 overflow-hidden border border-solid border-[#ccc]"
+    const numberStyles = "flex h-5 w-5 items-center justify-center text-xs text-neutral-700"
+    const todayNumberStyles = "flex h-5 w-5 items-center justify-center rounded-full bg-neutral-900 text-xs text-white"
     return(
         <div>
             <div className="flex items-center gap-4">
@@ -67,7 +66,12 @@ export default function MonthViewPage(){
                     ) : (
                         <div key={toDateKey(date)} className={cellStyles}>
                             <Link to={`/calendar/day/${toDateKey(date)}`} className="block h-full p-1">
-                                {date.getDate()}
+                                {/* A pill on the number rather than a cell background: the
+                                    cell will hold an outfit photo shortly, and a filled
+                                    background would fight it. */}
+                                <span className={isToday(date) ? todayNumberStyles : numberStyles}>
+                                    {date.getDate()}
+                                </span>
                             </Link>
                         </div>
                     )
