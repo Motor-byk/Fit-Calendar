@@ -20,15 +20,21 @@ export default function SignInPage(){
         return () => { cancelled = true; };
     }, []);
 
+    // Where RequireUser was headed before it bounced them here. Rebuilt from all three
+    // parts: pathname alone drops the query, which would land someone following a
+    // /calendar/month?m=2026-03 bookmark on the current month instead.
+    const from = location.state?.from;
+    const target = from ? `${from.pathname}${from.search}${from.hash}` : "/calendar/month";
+
     // Already signed in — usually from hitting /signin directly, or from a refresh that
-    // restored the session. RequireUser stashes where they were headed.
+    // restored the session.
     if (status === "ready" && user !== null) {
-        return <Navigate to={location.state?.from?.pathname ?? "/calendar/month"} replace/>;
+        return <Navigate to={target} replace/>;
     }
 
     async function choose(userId) {
         await signIn(userId);
-        navigate(location.state?.from?.pathname ?? "/calendar/month", { replace: true });
+        navigate(target, { replace: true });
     }
 
     return(
